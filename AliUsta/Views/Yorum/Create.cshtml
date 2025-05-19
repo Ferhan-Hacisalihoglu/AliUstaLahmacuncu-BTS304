@@ -1,0 +1,125 @@
+﻿@model AliUsta.Models.YorumViewModel
+
+@{
+    ViewBag.Title = "Yeni Yorum Ekle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>@ViewBag.Title</h2>
+    <hr />
+
+    @using (Html.BeginForm("Create", "Yorum", FormMethod.Post, new { @class = "needs-validation", novalidate = "" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row g-3">
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger col-12" })
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger col-12">@TempData["ErrorMessage"]</div>
+            }
+
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.MusteriID, htmlAttributes: new { @class = "form-label" })
+                @Html.DropDownListFor(model => model.MusteriID, Model.MusterilerListesi, "-- Müşteri Seçiniz --", new { @class = "form-select", id = "MusteriID", required = "required", autofocus = "autofocus" })
+                @Html.ValidationMessageFor(model => model.MusteriID, "", new { @class = "text-danger d-block" })
+            </div>
+
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.SiparisID, "Sipariş", htmlAttributes: new { @class = "form-label" })
+                @Html.DropDownListFor(model => model.SiparisID, Model.SiparislerListesi, "-- Önce Müşteri Seçiniz --", new { @class = "form-select", id = "SiparisID", required = "required" })
+                @Html.ValidationMessageFor(model => model.SiparisID, "", new { @class = "text-danger d-block" })
+            </div>
+
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Puan, htmlAttributes: new { @class = "form-label" })
+                @Html.EditorFor(model => model.Puan, new { htmlAttributes = new { @class = "form-control", type = "number", min = "1", max = "5", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Puan, "", new { @class = "text-danger d-block" })
+            </div>
+
+            <div class="col-md-8">
+                @Html.LabelFor(model => model.Tarih, htmlAttributes: new { @class = "form-label" })
+                @Html.EditorFor(model => model.Tarih, new { htmlAttributes = new { @class = "form-control", type = "datetime-local", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Tarih, "", new { @class = "text-danger d-block" })
+            </div>
+
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.Aciklama, htmlAttributes: new { @class = "form-label" })
+                @Html.TextAreaFor(model => model.Aciklama, new { @class = "form-control", rows = "4" })
+                @Html.ValidationMessageFor(model => model.Aciklama, "", new { @class = "text-danger d-block" })
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-comment-dots"></i> Yorumu Ekle
+            </button>
+            @Html.ActionLink("Yorum Listesine Dön", "Index", null, new { @class = "btn btn-secondary" })
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MusteriID').change(function () {
+                var musteriId = $(this).val();
+                var siparisSelect = $('#SiparisID');
+                siparisSelect.empty();
+                siparisSelect.append($('<option></option>').val('').text('-- Siparişler Yükleniyor --'));
+
+                if (musteriId) {
+                    $.ajax({
+                        url: '@Url.Action("GetSiparislerByMusteri", "Yorum")', // Controller adı Yorum olarak düzeltildi
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { musteriId: musteriId },
+                        success: function (response) {
+                            siparisSelect.empty();
+                            if (response.success && response.data.length > 0) {
+                                siparisSelect.append($('<option></option>').val('').text('-- Sipariş Seçiniz --'));
+                                $.each(response.data, function (i, siparis) {
+                                    siparisSelect.append($('<option></option>').val(siparis.Value).text(siparis.Text));
+                                });
+                            } else if (response.success && response.data.length === 0) {
+                                siparisSelect.append($('<option></option>').val('').text('Bu müşteriye ait sipariş bulunamadı'));
+                            } else {
+                                siparisSelect.append($('<option></option>').val('').text('Siparişler yüklenemedi'));
+                                console.error("Sipariş yükleme hatası: ", response.message);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            siparisSelect.empty();
+                            siparisSelect.append($('<option></option>').val('').text('Siparişler yüklenirken hata oluştu'));
+                            console.error("AJAX Hatası: ", status, error, xhr.responseText);
+                        }
+                    });
+                } else {
+                    siparisSelect.empty();
+                    siparisSelect.append($('<option></option>').val('').text('-- Önce Müşteri Seçiniz --'));
+                }
+            });
+
+            (function () {
+                'use strict'
+                var forms = document.querySelectorAll('.needs-validation')
+                Array.prototype.slice.call(forms)
+                    .forEach(function (form) {
+                        form.addEventListener('submit', function (event) {
+                            if (!form.checkValidity()) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            }
+                            form.classList.add('was-validated')
+                        }, false)
+                    })
+            })();
+
+            if ($('#MusteriID').val()) {
+                $('#MusteriID').trigger('change');
+            }
+        });
+    </script>
+}

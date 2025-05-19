@@ -1,0 +1,53 @@
+﻿@model AliUsta.Models.MalzemeViewModel
+
+@{
+    ViewBag.Title = "Malzeme Sil";
+}
+
+<div class="container mt-4">
+    <h2>@ViewBag.Title</h2>
+    <hr />
+
+    <div class="alert alert-danger" role="alert">
+        Aşağıdaki malzemeyi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.
+        Eğer bu malzeme tedarikçilerle veya ürünlerle ilişkiliyse silme işlemi başarısız olabilir.
+    </div>
+
+    <div>
+        <h4>@Model.Adi</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.ID)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.ID)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Adi)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Adi)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.StokMiktari)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.StokMiktari)
+            </dd>
+        </dl>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.ID)
+
+            <div class="form-actions no-color mt-4">
+                <input type="submit" value="Evet, Sil" class="btn btn-danger" />
+                @Html.ActionLink("Hayır, Listeye Dön", "Index", null, new { @class = "btn btn-secondary ms-2" })
+            </div>
+        }
+    </div>
+</div>

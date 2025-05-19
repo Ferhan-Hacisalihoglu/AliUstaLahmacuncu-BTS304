@@ -1,0 +1,155 @@
+﻿@model AliUsta.Models.UrunDetayMalzemeViewModel
+
+@{
+    ViewBag.Title = "Ürünü Düzenle ve Malzemelerini Yönet";
+}
+
+<div class="container mt-4">
+    <h2>@Model.Urun.Adi - @ViewBag.Title</h2>
+    <hr />
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+        </div>
+    }
+
+    <h4 class="mt-4">Ürün Bilgileri</h4>
+    @using (Html.BeginForm("Edit", "Urun", FormMethod.Post, new { @class = "needs-validation", novalidate = "" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Urun.ID)
+
+        <div class="row g-3">
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger col-12", data_valsummary_for = "Urun" })
+
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.Urun.Adi, htmlAttributes: new { @class = "form-label" })
+                @Html.EditorFor(model => model.Urun.Adi, new { htmlAttributes = new { @class = "form-control", required = "required", autofocus = "autofocus" } })
+                @Html.ValidationMessageFor(model => model.Urun.Adi, "", new { @class = "text-danger d-block" })
+            </div>
+
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.Urun.Fiyat, htmlAttributes: new { @class = "form-label" })
+                @Html.EditorFor(model => model.Urun.Fiyat, new { htmlAttributes = new { @class = "form-control", type = "number", step = "0.01", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Urun.Fiyat, "", new { @class = "text-danger d-block" })
+            </div>
+
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.Urun.KategoriID, "Kategori", htmlAttributes: new { @class = "form-label" })
+                @Html.DropDownListFor(model => model.Urun.KategoriID, Model.Urun.KategorilerListesi, "-- Kategori Seçiniz --", new { @class = "form-select" })
+                @Html.ValidationMessageFor(model => model.Urun.KategoriID, "", new { @class = "text-danger d-block" })
+            </div>
+
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.Urun.Aciklama, htmlAttributes: new { @class = "form-label" })
+                @Html.TextAreaFor(model => model.Urun.Aciklama, new { @class = "form-control", rows = "3" })
+                @Html.ValidationMessageFor(model => model.Urun.Aciklama, "", new { @class = "text-danger d-block" })
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Ürün Bilgilerini Güncelle
+            </button>
+        </div>
+    }
+
+    <hr class="my-4" />
+
+    @* Ürüne Malzeme Ekleme Formu *@
+    <h4 class="mt-4">Ürüne Malzeme Ekle</h4>
+    @using (Html.BeginForm("AddMalzemeToUrun", "Urun", FormMethod.Post, new { @class = "row g-3 align-items-end needs-validation", novalidate = "" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.YeniUrunMalzeme.UrunID) @* Model.YeniUrunMalzeme.UrunID ürünün ID'sini tutmalı *@
+
+        <div class="col-md-5">
+            @Html.LabelFor(model => model.YeniUrunMalzeme.MalzemeID, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(model => model.YeniUrunMalzeme.MalzemeID, Model.YeniUrunMalzeme.MalzemelerListesi, "-- Malzeme Seçiniz --", new { @class = "form-select", required = "required" })
+            @Html.ValidationMessageFor(model => model.YeniUrunMalzeme.MalzemeID, "", new { @class = "text-danger d-block" })
+        </div>
+        <div class="col-md-5">
+            @Html.LabelFor(model => model.YeniUrunMalzeme.Miktar, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.YeniUrunMalzeme.Miktar, new { htmlAttributes = new { @class = "form-control", type = "number", min = "1", required = "required" } })
+            @Html.ValidationMessageFor(model => model.YeniUrunMalzeme.Miktar, "", new { @class = "text-danger d-block" })
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-success w-100">
+                <i class="fas fa-plus"></i> Ekle
+            </button>
+        </div>
+    }
+
+    <h4 class="mt-5">Ürünün Mevcut Malzemeleri</h4>
+    @if (!Model.UrunMalzemeleri.Any())
+    {
+        <div class="alert alert-info mt-3">Bu ürüne henüz malzeme eklenmemiş.</div>
+    }
+    else
+    {
+        <table class="table table-sm table-striped table-hover mt-3">
+            <thead class="table-light">
+                <tr>
+                    <th>Malzeme Adı</th>
+                    <th class="text-end">Miktar</th>
+                    <th style="width: 100px;">İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var malzeme in Model.UrunMalzemeleri)
+                {
+                    <tr>
+                        <td>@malzeme.MalzemeAdi</td>
+                        <td class="text-end">@malzeme.Miktar</td>
+                        <td>
+                            @using (Html.BeginForm("RemoveMalzemeFromUrun", "Urun", FormMethod.Post, new { @class="d-inline" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("urunMalzemeId", malzeme.ID)
+                                @Html.Hidden("urunId", Model.Urun.ID)
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bu malzemeyi üründen kaldırmak istediğinizden emin misiniz?');">
+                                    <i class="fas fa-trash-alt"></i> Kaldır
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <div class="mt-4">
+        @Html.ActionLink("Ürün Listesine Dön", "Index", null, new { @class = "btn btn-secondary" })
+    </div>
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+}

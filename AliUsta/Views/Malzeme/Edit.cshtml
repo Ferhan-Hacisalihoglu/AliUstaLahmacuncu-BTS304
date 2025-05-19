@@ -1,0 +1,38 @@
+﻿@model AliUsta.Models.MalzemeViewModel
+
+@{
+    ViewBag.Title = "Malzeme Düzenle";
+}
+
+<div class="container mt-4">
+    <h2>@ViewBag.Title: @Model.Adi</h2>
+    <hr />
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    @using (Html.BeginForm("Edit", "Malzeme", FormMethod.Post, new { @class = "row g-3" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.ID)
+
+        @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+        <div class="col-md-6">
+            @Html.LabelFor(model => model.Adi, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.Adi, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Adi, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-12 mt-4">
+            <button type="submit" class="btn btn-primary">Güncelle</button>
+            @Html.ActionLink("Listeye Dön", "Index", null, new { @class = "btn btn-secondary ms-2" })
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

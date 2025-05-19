@@ -1,0 +1,75 @@
+﻿@model AliUsta.Models.PersonelViewModel
+
+@{
+    ViewBag.Title = "Personeli Sil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>@ViewBag.Title</h2>
+    <hr />
+    <h3 class="text-danger">Bu personeli silmek istediğinizden emin misiniz?</h3>
+    <div class="alert alert-warning">
+        <strong>Uyarı!</strong> Bu işlem geri alınamaz.
+    </div>
+
+    <div>
+        <h4>Personel Detayları</h4>
+        <dl class="row">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Ad)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Ad)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Soyad)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Soyad)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Telefon)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Telefon)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.EPosta)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.EPosta)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Maas)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Maas)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.GorevAdi)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.GorevAdi)
+            </dd>
+        </dl>
+
+        @using (Html.BeginForm("Delete", "Personel", new { id = Model.ID }, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.ID)
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash-alt"></i> Evet, Sil
+                </button>
+                @Html.ActionLink("Hayır, Listeye Dön", "Index", null, new { @class = "btn btn-secondary" })
+            </div>
+        }
+    </div>
+</div>

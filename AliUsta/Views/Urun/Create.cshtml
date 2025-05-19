@@ -1,0 +1,127 @@
+﻿@model AliUsta.Models.UrunViewModel
+@* UrunViewModel'in güncellenmiş hali (UrunMalzemeleri ve YeniUrunMalzemeFormu içeren) *@
+
+@{
+    ViewBag.Title = "Yeni Ürün Ekle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>@ViewBag.Title</h2>
+    <hr />
+
+    @if (TempData["SuccessMessage"] != null) { /* ... TempData mesajları ... */ }
+    @if (TempData["ErrorMessage"] != null) { /* ... TempData mesajları ... */ }
+
+    @* Ana Ürün Bilgileri Formu ve Malzeme Ekleme/Listeleme aynı form içinde olacaksa,
+        Bu BeginForm tüm sayfayı kapsamalı ve Create action'ına gitmeli.
+        Malzeme ekleme/çıkarma işlemleri için ayrı submit butonları ve action'lar (veya AJAX) gerekir.
+        Bu, Edit.cshtml'deki gibi birden fazla form yerine tek bir büyük form anlamına gelir
+        ve yönetimi zorlaştırır.
+    *@
+
+    @using (Html.BeginForm("Create", "Urun", FormMethod.Post, new { @class = "needs-validation", novalidate = "" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @* Ürün Bilgileri *@
+        <h4 class="mt-4">Ürün Bilgileri</h4>
+        <div class="row g-3">
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger col-12" })
+
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.Adi, htmlAttributes: new { @class = "form-label" })
+                @Html.EditorFor(model => model.Adi, new { htmlAttributes = new { @class = "form-control", required = "required", autofocus = "autofocus" } })
+                @Html.ValidationMessageFor(model => model.Adi, "", new { @class = "text-danger d-block" })
+            </div>
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.Fiyat, htmlAttributes: new { @class = "form-label" })
+                @Html.EditorFor(model => model.Fiyat, new { htmlAttributes = new { @class = "form-control", type = "number", step = "0.01", required = "required" } })
+                @Html.ValidationMessageFor(model => model.Fiyat, "", new { @class = "text-danger d-block" })
+            </div>
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.KategoriID, "Kategori", htmlAttributes: new { @class = "form-label" })
+                @Html.DropDownListFor(model => model.KategoriID, Model.KategorilerListesi, "-- Kategori Seçiniz --", new { @class = "form-select" })
+                @Html.ValidationMessageFor(model => model.KategoriID, "", new { @class = "text-danger d-block" })
+            </div>
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.Aciklama, htmlAttributes: new { @class = "form-label" })
+                @Html.TextAreaFor(model => model.Aciklama, new { @class = "form-control", rows = "3" })
+                @Html.ValidationMessageFor(model => model.Aciklama, "", new { @class = "text-danger d-block" })
+            </div>
+        </div>
+
+        <hr class="my-4" />
+
+        @* Ürüne Malzeme Ekleme Bölümü - BU BÖLÜM JAVASCRIPT İLE DİNAMİK OLARAK YÖNETİLMELİDİR *@
+        <h4 class="mt-4">Eklenecek Malzemeler</h4>
+        <div id="malzemeEklemeAlani">
+            @* JavaScript ile buraya dinamik olarak malzeme satırları eklenecek *@
+            @* Örnek bir satır (JavaScript ile oluşturulacak ve name attribute'ları indexlenecek):
+                <div class="row g-3 align-items-end mb-2 malzeme-satiri">
+                    <div class="col-md-5">
+                        Html.DropDownList("UrunMalzemeleri[0].MalzemeID", Model.YeniUrunMalzemeFormu.MalzemelerListesi, "-- Malzeme Seçiniz --", new { @class = "form-select malzeme-dropdown" })
+                    </div>
+                    <div class="col-md-5">
+                        Html.TextBox("UrunMalzemeleri[0].Miktar", null, new { @class = "form-control malzeme-miktar", type = "number", min = "1" })
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger btn-sm malzeme-kaldir-btn">Kaldır</button>
+                    </div>
+                </div>
+            *@
+        </div>
+        <button type="button" id="btnYeniMalzemeEkle" class="btn btn-info btn-sm mt-2 mb-3">Yeni Malzeme Satırı Ekle</button>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-save"></i> Tümünü Kaydet
+            </button>
+            @Html.ActionLink("Listeye Dön", "Index", null, new { @class = "btn btn-secondary" })
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        // Bootstrap 5 form doğrulama
+        (function () { /* ... Mevcut Bootstrap validasyon kodu ... */ })();
+
+        $(document).ready(function () {
+            let malzemeIndex = 0;
+            const malzemeListesiHtml = @Html.Raw(Json.Encode(Model.YeniUrunMalzemeFormu.MalzemelerListesi));
+
+            function createMalzemeDropdownHtml(index) {
+                let options = '<option value="">-- Malzeme Seçiniz --</option>';
+                malzemeListesiHtml.forEach(function(item) {
+                    options += `<option value="${item.Value}">${item.Text}</option>`;
+                });
+                return `<select name="UrunMalzemeleri[${index}].MalzemeID" class="form-select malzeme-dropdown" required>${options}</select>`;
+            }
+
+            $('#btnYeniMalzemeEkle').click(function () {
+                const yeniSatirHtml = `
+                    <div class="row g-3 align-items-end mb-2 malzeme-satiri">
+                        <div class="col-md-5">
+                            <label class="form-label d-none">Malzeme</label> <!-- Ekran okuyucular için -->
+                            ${createMalzemeDropdownHtml(malzemeIndex)}
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label d-none">Miktar</label> <!-- Ekran okuyucular için -->
+                            <input name="UrunMalzemeleri[${malzemeIndex}].Miktar" class="form-control malzeme-miktar" type="number" min="1" placeholder="Miktar" required />
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-danger btn-sm malzeme-kaldir-btn w-100">Kaldır</button>
+                        </div>
+                    </div>`;
+                $('#malzemeEklemeAlani').append(yeniSatirHtml);
+                malzemeIndex++;
+            });
+
+            $('#malzemeEklemeAlani').on('click', '.malzeme-kaldir-btn', function () {
+                $(this).closest('.malzeme-satiri').remove();
+            });
+        });
+    </script>
+}

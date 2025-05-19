@@ -1,0 +1,105 @@
+﻿@model AliUsta.Models.AnaSayfaIstatistikViewModel
+
+@{
+    ViewBag.Title = "Ana Panel";
+}
+
+<div class="container mt-4">
+    <h3 class="text-center mb-4">Yönetim Panelleri</h3>
+    <div class="row mt-4 text-center">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Malzeme Yönetimi</h5>
+                    <p class="card-text">Mevcut malzemelerinizi görüntüleyin, yeni malzeme ekleyin veya stok bilgilerini güncelleyin.</p>
+                    @Html.ActionLink("Malzemelere Git »", "Index", "Malzeme", null, new { @class = "btn btn-outline-primary mt-auto" })
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Tedarikçi Yönetimi</h5>
+                    <p class="card-text">Tedarikçi bilgilerinizi kaydedin, güncelleyin ve hangi malzemelerin temin edildiğini takip edin.</p>
+                    @Html.ActionLink("Tedarikçilere Git »", "Index", "Tedarikci", null, new { @class = "btn btn-outline-success mt-auto" })
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Alım Yönetimi</h5>
+                    <p class="card-text">Tedarikçilerden yapılan malzeme alımlarını kaydedin ve geçmiş alımlarınızı görüntüleyin.</p>
+                    @Html.ActionLink("Alımlara Git »", "Index", "Alim", null, new { @class = "btn btn-outline-info mt-auto" })
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Kategori Yönetimi</h5>
+                    <p class="card-text">Ürün kategorilerinizi tanımlayın ve düzenleyin, ürünlerinizi daha iyi organize edin.</p>
+                    @Html.ActionLink("Kategorilere Git »", "Index", "Kategori", null, new { @class = "btn btn-outline-warning mt-auto" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4 text-center">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Ürün Yönetimi</h5>
+                    <p class="card-text">Satışa sunduğunuz ürünleri ekleyin, fiyatlarını ve açıklamalarını güncelleyin.</p>
+                    @Html.ActionLink("Ürünlere Git »", "Index", "Urun", null, new { @class = "btn btn-outline-danger mt-auto" })
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Personel Yönetimi</h5>
+                    <p class="card-text">Personel bilgilerinizi yönetin, yeni personel ekleyin ve görev atamalarını yapın.</p>
+                    @Html.ActionLink("Personellere Git »", "Index", "Personel", null, new { @class = "btn btn-outline-dark mt-auto" })
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Adres Yönetimi</h5>
+                    <p class="card-text">Müşteri adreslerini kaydedin, düzenleyin ve teslimat bilgilerini yönetin.</p>
+                    @Html.ActionLink("Adreslere Git »", "Index", "Adres", null, new { @class = "btn btn-outline-secondary mt-auto" })
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Müşteri Yönetimi</h5>
+                    <p class="card-text">Müşteri kayıtlarınızı oluşturun, iletişim bilgilerini güncelleyin ve müşteri ilişkilerinizi yönetin.</p>
+                    @Html.ActionLink("Müşterilere Git »", "Index", "Musteri", null, new { @class = "btn btn-outline-primary mt-auto" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4 text-center justify-content-start">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Sipariş Yönetimi</h5>
+                    <p class="card-text">Yeni siparişler oluşturun, mevcut siparişleri görüntüleyin ve sipariş süreçlerini takip edin.</p>
+                    @Html.ActionLink("Siparişlere Git »", "Index", "Siparis", null, new { @class = "btn btn-outline-success mt-auto" })
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Yorum Yönetimi</h5>
+                    <p class="card-text">Müşteri yorumlarını inceleyin, yeni yorum ekleyin ve müşteri geri bildirimlerini yönetin.</p>
+                    @Html.ActionLink("Yorumlara Git »", "Index", "Yorum", null, new { @class = "btn btn-outline-info mt-auto" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

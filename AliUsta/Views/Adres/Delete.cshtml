@@ -1,0 +1,47 @@
+﻿@model AliUsta.Models.AdresViewModel
+
+@{
+    ViewBag.Title = "Adresi Sil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>@ViewBag.Title</h2>
+    <hr />
+    <h3 class="text-danger">Bu adresi silmek istediğinizden emin misiniz?</h3>
+    <div class="alert alert-warning">
+        <strong>Uyarı!</strong> Bu işlem geri alınamaz.
+    </div>
+
+    <div>
+        <h4>Adres Detayları</h4>
+        <dl class="row">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.MusteriAdiSoyadi)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.MusteriAdiSoyadi)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Aciklama)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Aciklama)
+            </dd>
+        </dl>
+
+        @using (Html.BeginForm("Delete", "Adres", new { id = Model.ID }, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.ID)
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash-alt"></i> Evet, Sil
+                </button>
+                @Html.ActionLink("Hayır, Listeye Dön", "Index", null, new { @class = "btn btn-secondary" })
+            </div>
+        }
+    </div>
+</div>

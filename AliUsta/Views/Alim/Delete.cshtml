@@ -1,0 +1,67 @@
+﻿@model AliUsta.Models.AlimViewModel
+
+@{
+    ViewBag.Title = "Alım Kaydını Sil";
+}
+
+<div class="container mt-4">
+    <h2>@ViewBag.Title</h2>
+    <hr />
+    <h3 class="text-danger">Bu alım kaydını silmek istediğinizden emin misiniz?</h3>
+    <div class="alert alert-warning">
+        <strong>Uyarı!</strong> Bu işlem geri alınamaz.
+    </div>
+
+    <div>
+        <h4>Alım Detayları</h4>
+        <dl class="row">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.TedarikciAdi)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.TedarikciAdi)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.MalzemeAdi)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.MalzemeAdi)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Miktar)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Miktar)
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Tarih)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Tarih, "{0:dd.MM.yyyy}")
+            </dd>
+        </dl>
+
+        @using (Html.BeginForm()) // Bu, mevcut URL'ye (Alim/Delete/ID) POST yapar
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.ID) @* ID'nin formla birlikte gönderildiğinden emin olun *@
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash-alt"></i> Evet, Sil
+                </button>
+                @Html.ActionLink("Hayır, Listeye Dön", "Index", null, new { @class = "btn btn-secondary" })
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts{
+    // Gerekirse buraya özel scriptler eklenebilir
+    // Font Awesome ikonları için (kullanıyorsanız)
+    //
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+}

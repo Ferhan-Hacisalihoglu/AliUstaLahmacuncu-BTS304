@@ -1,0 +1,60 @@
+﻿@model AliUsta.Models.SiparisViewModel
+
+@{
+    ViewBag.Title = "Siparişi Sil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>@ViewBag.Title (#@Model.ID)</h2>
+    <hr />
+    <h3 class="text-danger">Bu siparişi silmek istediğinizden emin misiniz?</h3>
+    <div class="alert alert-warning">
+        <strong>Uyarı!</strong> Bu işlem geri alınamaz. (Not: Stoklar otomatik olarak iade edilmeyecektir.)
+    </div>
+
+    <div>
+        <h4>Sipariş Detayları</h4>
+        <dl class="row">
+            <dt class="col-sm-3">Sipariş ID</dt>
+            <dd class="col-sm-9">@Model.ID</dd>
+
+            <dt class="col-sm-3">Müşteri</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.MusteriAdiSoyadi)</dd>
+
+            <dt class="col-sm-3">Ürün</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.UrunAdi)</dd>
+
+            <dt class="col-sm-3">Miktar</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Miktar)</dd>
+
+            <dt class="col-sm-3">Toplam Fiyat</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Fiyat)</dd>
+
+            <dt class="col-sm-3">Sipariş Tarihi</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Tarih, "{0:dd.MM.yyyy HH:mm}")</dd>
+
+            <dt class="col-sm-3">Usta</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.UstaAdiSoyadi)</dd>
+
+            <dt class="col-sm-3">Kurye</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.KuryeAdiSoyadi)</dd>
+
+            <dt class="col-sm-3">Teslimat Adresi</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.AdresAciklamasi)</dd>
+        </dl>
+
+        @using (Html.BeginForm("Delete", "Siparis", new { id = Model.ID }, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.ID)
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash-alt"></i> Evet, Sil
+                </button>
+                @Html.ActionLink("Hayır, Listeye Dön", "Index", null, new { @class = "btn btn-secondary" })
+            </div>
+        }
+    </div>
+</div>

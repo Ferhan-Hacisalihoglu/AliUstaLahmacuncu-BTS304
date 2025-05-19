@@ -1,0 +1,59 @@
+﻿@model AliUsta.Models.AdresViewModel
+
+@{
+    ViewBag.Title = "Yeni Adres Ekle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>@ViewBag.Title</h2>
+    <hr />
+
+    @using (Html.BeginForm("Create", "Adres", FormMethod.Post, new { @class = "needs-validation", novalidate = "" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row g-3">
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger col-12" })
+
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.MusteriID, "Müşteri", htmlAttributes: new { @class = "form-label" })
+                @Html.DropDownListFor(model => model.MusteriID, Model.MusterilerListesi, "-- Müşteri Seçiniz --", new { @class = "form-select", required = "required", autofocus = "autofocus" })
+                @Html.ValidationMessageFor(model => model.MusteriID, "", new { @class = "text-danger d-block" })
+            </div>
+
+            <div class="col-md-12">
+                @Html.LabelFor(model => model.Aciklama, htmlAttributes: new { @class = "form-label" })
+                @Html.TextAreaFor(model => model.Aciklama, new { @class = "form-control", rows = "4", required = "required" })
+                @Html.ValidationMessageFor(model => model.Aciklama, "", new { @class = "text-danger d-block" })
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-save"></i> Kaydet
+            </button>
+            @Html.ActionLink("Listeye Dön", "Index", null, new { @class = "btn btn-secondary" })
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+}
