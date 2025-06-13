@@ -41,6 +41,3 @@ This system helps Ali Usta manage orders, ingredients, staff, and customers in a
 
 This project was created as a school assignment for the **Database Management Systems-2** course at Bartın University, Faculty of Science, Department of Computer Technology and Information Systems.
 
----
-
-Feel free to check the code and contribute! For any questions, contact me.
