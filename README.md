@@ -1,5 +1,3 @@
-**GitHub Description for Ali Usta Lahmacuncu Management System**
-
 This is a database management system for "Ali Usta Lahmacuncu," a shop that takes custom orders, produces food with different ingredients, and manages everything from ingredient supply to delivery. The project was developed using **MySQL** for the database and **ASP.NET MVC** for the web application.
 
 ### Features
