@@ -37,6 +37,8 @@ This system helps Ali Usta manage orders, ingredients, staff, and customers in a
 - **Backend**: ASP.NET MVC
 - **Database**: MySQL
 
+This project was created as a school assignment for the **Database Management Systems-2** course at Bartın University, Faculty of Science, Department of Computer Technology and Information Systems.
+
 ### Screenshots
 
 ![Picture1](https://github.com/user-attachments/assets/67699e6c-30c3-4f9a-b96e-b2ebad328775)
@@ -51,7 +53,4 @@ This system helps Ali Usta manage orders, ingredients, staff, and customers in a
 ![Picture10](https://github.com/user-attachments/assets/007fde1f-6e0f-4012-89ea-dbe7fe27e934)
 ![Picture11](https://github.com/user-attachments/assets/c76c963e-78cd-48c0-9cb2-ef99f5af8d27)
 ![Picture12](https://github.com/user-attachments/assets/c3656473-8c2e-4d45-a971-52a4adbaa4af)
-
-
-This project was created as a school assignment for the **Database Management Systems-2** course at Bartın University, Faculty of Science, Department of Computer Technology and Information Systems.
 
